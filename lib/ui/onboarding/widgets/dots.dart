@@ -29,7 +29,7 @@ Widget activeDot() {
 
 Widget inActiveDot() {
   return Container(
-    width: 20,
+    width: 18,
     height: 8,
     decoration: BoxDecoration(
         border: Border.all(color: AppColors.C_DE7773),

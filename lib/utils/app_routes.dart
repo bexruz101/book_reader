@@ -1,5 +1,5 @@
 
-import 'package:book_reader/ui/tab_box/books_list_screen.dart';
+import 'package:book_reader/ui/tab_box/book_list/books_list_screen.dart';
 import 'package:book_reader/ui/onboarding/welcome_screen.dart';
 import 'package:book_reader/ui/splash/splash_screen.dart';
 import 'package:book_reader/ui/tab_box/tab_box_screen.dart';

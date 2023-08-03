@@ -7,7 +7,7 @@ class AppImages{
   static const String booksListBlack = 'assets/png/booksList.png';
   static const String booksListOr = 'assets/png/booksList2.png';
   static const String account1 = 'assets/png/account1.png';
-  static const String account2 = 'assets/png/account2.png';
+  static const String account2 = 'assets/png/accoun2.png';
   static const String favorite1 = 'assets/png/favorite1.png';
   static const String favorite2 = 'assets/png/favorite2.png';
   static const String friends1 = 'assets/png/friends1.png';

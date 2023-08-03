@@ -20,19 +20,23 @@ class Dots extends StatelessWidget {
 
 Widget activeDot() {
   return Container(
-    width: 20,
-    height: 8,
+    width: 12,
+    height: 10,
     decoration: BoxDecoration(
-        color: AppColors.C_DE7773, borderRadius: BorderRadius.circular(5)),
+        color: AppColors.C_DE7773,
+        shape: BoxShape.circle
+    ),
   );
 }
 
 Widget inActiveDot() {
   return Container(
-    width: 18,
-    height: 8,
+    width: 12,
+    height: 10,
     decoration: BoxDecoration(
         border: Border.all(color: AppColors.C_DE7773),
-        color: AppColors.white, borderRadius: BorderRadius.circular(5)),
+        color: AppColors.white,
+        shape: BoxShape.circle
+    ),
   );
 }

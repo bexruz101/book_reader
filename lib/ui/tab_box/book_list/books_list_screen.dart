@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:book_reader/data/shared_pref/local_db.dart';
 import 'package:book_reader/ui/tab_box/book_list/pdfFile.dart';
 import 'package:book_reader/ui/tab_box/book_list/widgets/file_picker.dart';
 import 'package:file_picker/file_picker.dart';
@@ -19,36 +20,60 @@ class _BooksListScreenState extends State<BooksListScreen> {
     } else {}
   }
 
+  List<String?> file  = [];
+
   @override
   void initState() {
+    file;
     requestFileAccessPermission();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final file = await FilePickerr.pickFiles();
-          if (file == null) return;
-          openPDF(context, file);
-          final newFile = await saveFilePerm(file as PlatformFile);
+            file = await FilePickerr.pickFiles();
+            final result = await FilePicker.platform.pickFiles(
+                type: FileType.custom, allowedExtensions: ['pdf'], allowMultiple: true);
+            setState(() {
 
+            });
+          print('PATHSSSS NOWWW:$file');
         },
+      ),
+      body: Center(
+        child: Column(
+          children: file.isNotEmpty?List.generate(file.length, (index) => ListTile(
+            title: Text(file[index]!),
+            onTap: (){
+              openPDF(context, file[index] as String);
+            },
+        )):[Text('EMPTY$file'),]
+        ),
       ),
     );
   }
 
-  void openPDF(BuildContext context, File file) => Navigator.of(context).push(
+  void openPDF(BuildContext context, String file) => Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => PdfFile(file: file)),
       );
+
+  Files(List<String?> files){
+    if(files.isNotEmpty)
+    return files;
+    else{
+      return [];
+    }
+  }
 
   Future<File> saveFilePerm(PlatformFile file) async{
     final appStorage = await getApplicationDocumentsDirectory();
     final newFile = File('${appStorage.path}/${file.path}');
-
     return File(file.path!).copy(newFile.path);
-
   }
+
+
 }

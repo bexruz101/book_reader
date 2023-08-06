@@ -1,4 +1,5 @@
 
+import 'package:book_reader/model/book_model.dart';
 import 'package:book_reader/ui/tab_box/book_list/books_list_screen.dart';
 import 'package:book_reader/ui/onboarding/welcome_screen.dart';
 import 'package:book_reader/ui/splash/splash_screen.dart';

@@ -3,10 +3,16 @@ import 'package:flutter/services.dart';
 import 'colors.dart';
 
 
-
 class AppTheme{
   static ThemeData lightTheme = ThemeData(
       scaffoldBackgroundColor: AppColors.white,
+      bottomNavigationBarTheme:  BottomNavigationBarThemeData(
+          backgroundColor: AppColors.white,
+          selectedItemColor: AppColors.C_DE7773,
+          unselectedItemColor: AppColors.black,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+      ),
       appBarTheme: const AppBarTheme(
           elevation: 0,
           backgroundColor: AppColors.white,
@@ -118,14 +124,13 @@ class AppTheme{
 
   static ThemeData darkTheme = ThemeData(
       scaffoldBackgroundColor: AppColors.black,
-      // bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      //     backgroundColor: AppColors.c1C1243,
-      //     selectedItemColor: AppColors.cFF8A00,
-      //     unselectedItemColor: AppColors.c1C1243,
-      //     showSelectedLabels: true,
-      //     showUnselectedLabels: true,
-      //
-      // ),
+      bottomNavigationBarTheme:  BottomNavigationBarThemeData(
+          backgroundColor: AppColors.black,
+          selectedItemColor: AppColors.C_DE7773,
+          unselectedItemColor: AppColors.white,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+      ),
       appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.black,
           systemOverlayStyle: SystemUiOverlayStyle(

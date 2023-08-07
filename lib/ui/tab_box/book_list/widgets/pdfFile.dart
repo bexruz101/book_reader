@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -52,26 +51,3 @@ class _PdfFileState extends State<PdfFile> {
 
 
 }
-
-// appBar: AppBar(
-//   title: Text(name),
-//   actions: pages >= 2
-//       ? [
-//           Center(child: Text(text)),
-//           IconButton(
-//             icon: Icon(Icons.chevron_left, size: 32),
-//             onPressed: () {
-//               final page = indexPage == 0 ? pages : indexPage - 1;
-//               controller!.jumpToPage(page);
-//             },
-//           ),
-//           IconButton(
-//             icon: Icon(Icons.chevron_right, size: 32),
-//             onPressed: () {
-//               final page = indexPage == pages - 1 ? 0 : indexPage + 1;
-//               controller!.jumpToPage(page);
-//             },
-//           ),
-//         ]
-//       : null,
-// ),

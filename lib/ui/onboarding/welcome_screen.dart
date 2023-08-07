@@ -3,6 +3,7 @@ import 'package:book_reader/ui/onboarding/widgets/page_content.dart';
 import 'package:book_reader/utils/colors.dart';
 import 'package:book_reader/utils/images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../utils/app_routes.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -49,20 +50,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Dots(num: currentIndex),
               ],
             ),
-            SizedBox(height: 65,),
+            SizedBox(height: 35.h,),
             Ink(
               width: width/1.3,
-              height: 50,
-              decoration: BoxDecoration(color: AppColors.blue,borderRadius: BorderRadius.circular(20)),
+              height: 40.h,
+              decoration: BoxDecoration(color: AppColors.blue,borderRadius: BorderRadius.circular(20.r)),
               child: InkWell(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
                 onTap: (){
                   Navigator.pushReplacementNamed(context, RouteNames.tabBoxScreen);
                 },
                 child:  Center(child:Text('Start increase knowledge',style: Theme.of(context).textTheme.titleMedium!.copyWith(color: AppColors.white),)),
               ),
             ),
-            const  SizedBox(height: 50,),
+              SizedBox(height: 50.h,),
           ],
         ),
       ),

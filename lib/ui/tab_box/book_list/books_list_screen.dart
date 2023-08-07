@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:book_reader/data/db/local_db.dart';
-import 'package:book_reader/ui/tab_box/book_list/pdfFile.dart';
+import 'package:book_reader/ui/tab_box/book_list/widgets/pdfFile.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -56,6 +56,7 @@ class _BooksListScreenState extends State<BooksListScreen> {
                 path: file.path!));
             _loadFiles();
           },
+          child: Icon(Icons.upload),
         ),
         body: FutureBuilder<List<BookModel>>(
     future: LocalDatabase.getAllFiles(),

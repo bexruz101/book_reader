@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:book_reader/data/db/local_db.dart';
 import 'package:book_reader/ui/tab_box/book_list/pdfFile.dart';
-import 'package:book_reader/ui/tab_box/book_list/widgets/file_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+import '../../../model/book_model.dart';
 
 class BooksListScreen extends StatefulWidget {
   const BooksListScreen({super.key});
@@ -14,41 +16,103 @@ class BooksListScreen extends StatefulWidget {
 }
 
 class _BooksListScreenState extends State<BooksListScreen> {
-  Future<void> requestFileAccessPermission() async {
-    if (await Permission.storage.request().isGranted) {
-    } else {}
+  late Box<BookModel> _fileBox;
+  List<BookModel> files = [];
+
+  Future<void> _loadFiles() async {
+    _fileBox = await Hive.openBox<BookModel>('fileBox');
+    setState(() {
+      files = _fileBox.values.toList();
+    });
+  }
+
+  Future<void> clearData(int index) async {
+    var fileBox = await Hive.openBox<BookModel>('fileBox');
+    await fileBox.deleteAt(index);
+    setState((){});
   }
 
   @override
   void initState() {
-    requestFileAccessPermission();
+    _loadFiles();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final file = await FilePickerr.pickFiles();
-          if (file == null) return;
-          openPDF(context, file);
-          final newFile = await saveFilePerm(file as PlatformFile);
-
-        },
-      ),
-    );
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final result = await FilePicker.platform
+                .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+            if (result == null) return;
+            final file = result.files.first;
+            openPDF(context, file.path!);
+            LocalDatabase.saveFilePath(BookModel(
+                id: 0,
+                extension: file.extension!,
+                size: file.size,
+                name: file.name,
+                path: file.path!));
+            _loadFiles();
+          },
+        ),
+        body: FutureBuilder<List<BookModel>>(
+    future: LocalDatabase.getAllFiles(),
+    builder: (context,snapshot){
+      if(snapshot.connectionState == ConnectionState.waiting){
+        return Center(
+        child: CircularProgressIndicator(),
+        );
+    }else if(snapshot.hasError){
+        return Center(
+        child: Text('Error load data'),
+        );
+    }
+      else{
+        final books = snapshot.data ?? [];
+        return books.isNotEmpty
+            ? ListView.builder(
+            itemCount: books.length,
+            itemBuilder: (context, index) {
+              return Slidable(
+                startActionPane: ActionPane(
+                  motion: ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (v){
+                        setState(() {
+                          clearData(index);
+                        });
+                      },
+                      icon:Icons.delete,
+                      backgroundColor: Colors.red,
+                    )
+                  ],
+                ),
+                child: ListTile(
+                  title: Text(books[index].name),
+                  subtitle: Text('${books[index].size}'),
+                  trailing: Text(books[index].extension),
+                  onTap: () {
+                    openPDF(context, books[index].path);
+                  },
+                ),
+              );
+            })
+            : Center(child: Text('EMPTY'));
+      }
+    },
+    ));
   }
 
-  void openPDF(BuildContext context, File file) => Navigator.of(context).push(
+  void openPDF(BuildContext context, String file) => Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => PdfFile(file: file)),
       );
 
-  Future<File> saveFilePerm(PlatformFile file) async{
+  Future<File> saveFilePerm(PlatformFile file) async {
     final appStorage = await getApplicationDocumentsDirectory();
     final newFile = File('${appStorage.path}/${file.path}');
-
     return File(file.path!).copy(newFile.path);
-
   }
 }

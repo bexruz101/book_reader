@@ -71,9 +71,9 @@ class _BooksListScreenState extends State<BooksListScreen> {
     }
       else{
         final books = snapshot.data ?? [];
-        return files.isNotEmpty
+        return books.isNotEmpty
             ? ListView.builder(
-            itemCount: files.length,
+            itemCount: books.length,
             itemBuilder: (context, index) {
               return Slidable(
                 startActionPane: ActionPane(
@@ -91,11 +91,11 @@ class _BooksListScreenState extends State<BooksListScreen> {
                   ],
                 ),
                 child: ListTile(
-                  title: Text(files[index].name),
-                  subtitle: Text('${files[index].size}'),
-                  trailing: Text(files[index].extension),
+                  title: Text(books[index].name),
+                  subtitle: Text('${books[index].size}'),
+                  trailing: Text(books[index].extension),
                   onTap: () {
-                    openPDF(context, files[index].path);
+                    openPDF(context, books[index].path);
                   },
                 ),
               );

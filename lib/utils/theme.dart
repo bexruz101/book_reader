@@ -5,6 +5,7 @@ import 'colors.dart';
 
 class AppTheme{
   static ThemeData lightTheme = ThemeData(
+      listTileTheme: const ListTileThemeData(iconColor: AppColors.black,),
       scaffoldBackgroundColor: AppColors.white,
       bottomNavigationBarTheme:  BottomNavigationBarThemeData(
           backgroundColor: AppColors.white,
@@ -13,7 +14,7 @@ class AppTheme{
           showSelectedLabels: true,
           showUnselectedLabels: true,
       ),
-      appBarTheme: const AppBarTheme(
+      appBarTheme:  const AppBarTheme(
           elevation: 0,
           backgroundColor: AppColors.white,
           systemOverlayStyle: SystemUiOverlayStyle(
@@ -123,6 +124,7 @@ class AppTheme{
   );
 
   static ThemeData darkTheme = ThemeData(
+    listTileTheme: const ListTileThemeData(iconColor: AppColors.white,),
       scaffoldBackgroundColor: AppColors.black,
       bottomNavigationBarTheme:  BottomNavigationBarThemeData(
           backgroundColor: AppColors.black,

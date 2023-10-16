@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:book_reader/data/db/local_db.dart';
 import 'package:book_reader/ui/tab_box/book_list/widgets/pdfFile.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -29,7 +30,7 @@ class _BooksListScreenState extends State<BooksListScreen> {
   Future<void> clearData(int index) async {
     var fileBox = await Hive.openBox<BookModel>('fileBox');
     await fileBox.deleteAt(index);
-    setState((){});
+    setState(() {});
   }
 
   @override
@@ -41,6 +42,10 @@ class _BooksListScreenState extends State<BooksListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       appBar: AppBar(
+        title: Text(tr('Home'),style: Theme.of(context).textTheme.titleLarge,),
+        elevation: 0,
+      ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             final result = await FilePicker.platform
@@ -56,60 +61,65 @@ class _BooksListScreenState extends State<BooksListScreen> {
                 path: file.path!));
             _loadFiles();
           },
-          child: Icon(Icons.upload),
+          child:const Icon(Icons.upload),
         ),
         body: FutureBuilder<List<BookModel>>(
-    future: LocalDatabase.getAllFiles(),
-    builder: (context,snapshot){
-      if(snapshot.connectionState == ConnectionState.waiting){
-        return Center(
-        child: CircularProgressIndicator(),
-        );
-    }else if(snapshot.hasError){
-        return Center(
-        child: Text('Error load data'),
-        );
-    }
-      else{
-        final books = snapshot.data ?? [];
-        return books.isNotEmpty
-            ? ListView.builder(
-            itemCount: books.length,
-            itemBuilder: (context, index) {
-              return Slidable(
-                startActionPane: ActionPane(
-                  motion: ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: (v){
-                        setState(() {
-                          clearData(index);
-                        });
-                      },
-                      icon:Icons.delete,
-                      backgroundColor: Colors.red,
-                    )
-                  ],
-                ),
-                child: ListTile(
-                  title: Text(books[index].name),
-                  subtitle: Text('${books[index].size}'),
-                  trailing: Text(books[index].extension),
-                  onTap: () {
-                    openPDF(context, books[index].path);
-                  },
-                ),
+          future: LocalDatabase.getAllFiles(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            })
-            : Center(child: Text('EMPTY'));
-      }
-    },
-    ));
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text(tr('Error_load_data')),
+              );
+            } else {
+              final books = snapshot.data ?? [];
+              return books.isNotEmpty
+                  ? GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
+                      itemCount: books.length,
+                      itemBuilder: (context, index) {
+                        return Slidable(
+                          startActionPane: ActionPane(
+                            motion: ScrollMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (v) {
+                                  setState(() {
+                                    clearData(index);
+                                  });
+                                },
+                                icon: Icons.delete,
+                                backgroundColor: Colors.red,
+                              )
+                            ],
+                          ),
+                          child: ListTile(
+                            title: Text(books[index].name),
+                            subtitle: Text('${books[index].size}'),
+                            trailing: Text(books[index].extension),
+                            onTap: () {
+                              openPDF(context, books[index].path);
+                            },
+                          ),
+                        );
+                      },
+                    )
+                  : Center(child: Text('EMPTY'));
+            }
+          },
+        ));
   }
 
-  void openPDF(BuildContext context, String file) => Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => PdfFile(file: file)),
-      );
+  Future<void> openPDF(BuildContext context, String file) async {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => PdfFile(file: file)),
+    );
+  }
 
   Future<File> saveFilePerm(PlatformFile file) async {
     final appStorage = await getApplicationDocumentsDirectory();

@@ -22,5 +22,10 @@ class AppImages{
   static const String elipse1 = 'assets/svg/elipse1.svg';
   static const String elipse2 = 'assets/svg/elipse2.svg';
   static const String elipse3 = 'assets/svg/elipse3.svg';
+  static const String profile="assets/svg/profile.svg";
+  static const String google="assets/svg/google.svg";
+  static const String uz="assets/svg/uz.svg";
+  static const String ru="assets/svg/ru.svg";
+  static const String eng="assets/svg/eng.svg";
 
 }

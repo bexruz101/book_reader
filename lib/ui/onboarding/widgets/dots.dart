@@ -1,5 +1,6 @@
 import 'package:book_reader/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Dots extends StatelessWidget {
   const Dots({super.key, required this.num});
@@ -20,8 +21,8 @@ class Dots extends StatelessWidget {
 
 Widget activeDot() {
   return Container(
-    width: 12,
-    height: 10,
+    width: 12.w,
+    height: 10.h,
     decoration: BoxDecoration(
         color: AppColors.C_DE7773,
         shape: BoxShape.circle
@@ -31,8 +32,8 @@ Widget activeDot() {
 
 Widget inActiveDot() {
   return Container(
-    width: 12,
-    height: 10,
+    width: 12.w,
+    height: 10.h,
     decoration: BoxDecoration(
         border: Border.all(color: AppColors.C_DE7773),
         color: AppColors.white,

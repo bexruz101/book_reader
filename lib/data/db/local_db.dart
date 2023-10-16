@@ -18,4 +18,16 @@ class LocalDatabase {
     var fileBox = await Hive.openBox<BookModel>('fileBox');
     return fileBox.values.toList();
   }
+
+  static Future<void> saveBool(String key, bool value) async {
+    var boolBox = await Hive.openBox<bool>('boolBox');
+    await boolBox.put(key, value);
+  }
+
+  static Future<bool?> getBool(String key, {bool? defaultValue}) async {
+    var boolBox = await Hive.openBox<bool>('boolBox');
+    return boolBox.get(key, defaultValue: defaultValue);
+  }
+
+
 }

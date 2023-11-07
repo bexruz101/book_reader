@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import '../../utils/colors.dart';
 
 class VocabularyScreen extends StatefulWidget {
   const VocabularyScreen({super.key});

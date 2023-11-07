@@ -1,15 +1,7 @@
-
-import 'package:book_reader/model/book_model.dart';
-import 'package:book_reader/ui/auth/auth_screen.dart';
-import 'package:book_reader/ui/auth/sign_in/sign_in_screen.dart';
-import 'package:book_reader/ui/auth/sign_up/sign_up_screen.dart';
-import 'package:book_reader/ui/auth/widgets/global_button.dart';
-import 'package:book_reader/ui/tab_box/book_list/books_list_screen.dart';
+import 'package:book_reader/ui/tab_box/home/home_screen.dart';
 import 'package:book_reader/ui/onboarding/welcome_screen.dart';
 import 'package:book_reader/ui/splash/splash_screen.dart';
 import 'package:book_reader/ui/tab_box/tab_box_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RouteNames{
@@ -27,13 +19,11 @@ class AppRoutes{
       case RouteNames.splashScreen:
         return MaterialPageRoute(builder: (context)=>const SplashScreen());
       case RouteNames.booksListScreen:
-        return MaterialPageRoute(builder: (context)=>const BooksListScreen());
+        return MaterialPageRoute(builder: (context)=>const HomeScreen());
       case RouteNames.onboardingScreen:
         return MaterialPageRoute(builder:(context)=> WelcomeScreen());
       case RouteNames.tabBoxScreen:
         return MaterialPageRoute(builder: (context)=>const TabBoxScreen());
-      case RouteNames.authScreen:
-        return MaterialPageRoute(builder: (context)=>const AuthScreen());
       default:
         return MaterialPageRoute(builder: (context){
           return const Scaffold(

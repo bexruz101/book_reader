@@ -1,6 +1,6 @@
-import 'package:book_reader/ui/tab_box/book_list/books_list_screen.dart';
-import 'package:book_reader/ui/tab_box/favorites_screen.dart';
-import 'package:book_reader/ui/tab_box/vocabulary_screen.dart';
+import 'package:book_reader/ui/tab_box/home/home_screen.dart';
+import 'package:book_reader/ui/tab_box/all_books/all_books_screen.dart';
+import 'package:book_reader/ui/tab_box/vocabulary/vocabulary_screen.dart';
 import 'package:book_reader/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'account/account_screen.dart';
@@ -19,9 +19,9 @@ class _TabBoxScreenState extends State<TabBoxScreen> {
   @override
   void initState() {
     _screens = [
-      const BooksListScreen(),
+      const HomeScreen(),
       const VocabularyScreen(),
-      const FavoritesScreen(),
+      const AllBooksScreen(),
       const AccountScreen(),
     ];
     super.initState();

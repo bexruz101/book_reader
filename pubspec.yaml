@@ -25,25 +25,18 @@ dependencies:
   hive_generator: ^2.0.0
   build_runner: ^2.4.6
   flutter_slidable: ^3.0.0
-  firebase_core: ^2.15.0
-  firebase_auth: ^4.7.3
-  cloud_firestore: ^4.8.5
-  firebase_storage: ^11.2.6
   provider: ^6.0.5
   equatable: ^2.0.5
   bloc: ^8.1.2
   flutter_bloc: ^8.1.3
-  google_sign_in: ^6.1.5
   image_picker: ^1.0.4
   zoom_tap_animation: ^1.1.0
   path_provider: ^2.1.1
+  firebase_storage: ^11.4.1
+  firebase_core: ^2.21.0
+  firebase_auth: ^4.12.1
 
  
-
-
-
-
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

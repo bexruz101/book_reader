@@ -79,7 +79,7 @@ class _AllBooksScreenState extends State<AllBooksScreen> {
                         );
                       },
                     )
-                  : Center(child: Text('EMPTY'));
+                  : Center(child: Text('EMPTYY'));
             }
           },
         ),

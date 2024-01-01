@@ -8,6 +8,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../model/book_model.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,6 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+   getNumberOfPages(String filePath) async {
+      // Load the PDF file
+      final file = File(filePath);
+      final pdfDocument = await PdfDocument.fromBase64String(file.path);
+      // Get the number of pages
+      final pages = pdfDocument.pages;
+      return pages;
+  }
+
+
   @override
   void initState() {
     _loadFiles();
@@ -52,14 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             final result = await FilePicker.platform
-                .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);            
+                .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
             if (result == null) return;
-            final file = result.files.first;                                     
-            openPDF(context, file.path!);                                      
+            final file = result.files.first;
+            int num =await getNumberOfPages(file.path.toString());
+            openPDF(context, file.path!,num);
             LocalDatabase.saveFilePath(BookModel(
                 id: 0,
                 extension: file.extension!,
-                size: file.size,  
+                size: file.size,
                 name: file.name,
                 path: file.path!));
             _loadFiles();
@@ -105,8 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             title: Text(books[index].name),
                             subtitle: Text('${books[index].size}'),
                             trailing: Text(books[index].extension),
-                            onTap: () {
-                              openPDF(context, books[index].path);
+                            onTap: () async{
+                              int numbers =await getNumberOfPages(books[index].path);
+                              openPDF(context, books[index].path,numbers);
                             },
                           ),
                         );
@@ -116,11 +129,16 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           },
         ));
+
+
   }
 
-  Future<void> openPDF(BuildContext context, String file) async {
+  Future<void> openPDF(BuildContext context, String file,int bookLength) async {
+    final extractor = PdfTextExtractor(PdfDocument.fromBase64String(file));
+    final document = await PdfDocument.fromBase64String(file);
+
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PdfFile(file: file)),
+      MaterialPageRoute(builder: (context) => PdfScreen(bookPath: file, bookPages: bookLength, extractor: extractor, document: document)),
     );
   }
 

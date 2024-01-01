@@ -5,6 +5,8 @@ import 'package:hive/hive.dart';
 import '../../../data/db/local_db.dart';
 import '../../../model/book_model.dart';
 import '../home/widgets/pdfFile.dart';
+import 'dart:io';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class AllBooksScreen extends StatefulWidget {
   const AllBooksScreen({super.key});
@@ -20,6 +22,14 @@ class _AllBooksScreenState extends State<AllBooksScreen> {
     await fileBox.deleteAt(index);
     setState(() {});
   }
+
+    getNumberOfPages(String filePath) async {
+     // Load the PDF file
+     final file = File(filePath);
+     final pdfDocument =  PdfDocument.fromBase64String(file.path);
+     final pages = pdfDocument.pages;
+     return pages;
+   }
 
   @override
   void initState() {
@@ -72,8 +82,9 @@ class _AllBooksScreenState extends State<AllBooksScreen> {
                             title: Text(books[index].name),
                             subtitle: Text('${books[index].size}'),
                             trailing: Text(books[index].extension),
-                            onTap: () {
-                              openPDF(context, books[index].path);
+                            onTap: ()async {
+                              int numbers = await getNumberOfPages(books[index].path);
+                              openPDF(context, books[index].path,numbers);
                             },
                           ),
                         );
@@ -87,9 +98,12 @@ class _AllBooksScreenState extends State<AllBooksScreen> {
   }
 }
 
-Future<void> openPDF(BuildContext context, String file) async {
+Future<void> openPDF(BuildContext context, String file,int bookLength) async {
+  final extractor = PdfTextExtractor(PdfDocument.fromBase64String(file));
+  final document = await PdfDocument.fromBase64String(file);
+
   Navigator.of(context).push(
-    MaterialPageRoute(builder: (context) => PdfFile(file: file)),
+    MaterialPageRoute(builder: (context) =>  PdfScreen(bookPath: file, bookPages: bookLength, extractor: extractor, document: document)),
   );
 }
 

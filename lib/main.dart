@@ -1,4 +1,5 @@
 import 'package:book_reader/data/db/local_db.dart';
+import 'package:book_reader/data/storage_repository/local_db.dart';
 import 'package:book_reader/model/book_model.dart';
 import 'package:book_reader/provider/profile_provider.dart';
 import 'package:book_reader/utils/app_routes.dart';
@@ -16,6 +17,7 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(BookModelAdapter());
   LocalDatabase.openBoxBooks();
+  StorageRepository.getInstance();
 
   runApp(EasyLocalization(
     supportedLocales: const [

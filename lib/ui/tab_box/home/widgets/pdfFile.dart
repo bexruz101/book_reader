@@ -1,6 +1,10 @@
 import 'dart:io';
+import 'package:book_reader/utils/ui_utils/error_message_dialog.dart';
+import 'package:book_reader/utils/ui_utils/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import '../../../../data/db/local_db.dart';
+import 'send_to_chatgpt.dart';
 
 class PdfFile extends StatefulWidget {
   const PdfFile({
@@ -17,6 +21,7 @@ class PdfFile extends StatefulWidget {
 class _PdfFileState extends State<PdfFile> {
   late PdfViewerController _pdfViewerController;
   OverlayEntry? _overlayEntry;
+  String? chatGptResponse;
 
   @override
   void initState() {
@@ -24,6 +29,14 @@ class _PdfFileState extends State<PdfFile> {
     _overlayEntry;
     super.initState();
   }
+
+  Future<void> _saveStrings({required List<String> val}) async {
+    List<Map<String, dynamic>> oldTxt = await LocalDatabase.getVocabList('key') ;
+    oldTxt.add({oldTxt.length.toString():[val[0],val[1]]});
+    await LocalDatabase.saveVocab('key', oldTxt);
+    print('Strings saved successfully!');
+  }
+
 
   Future<void> _showContextMenu(
       BuildContext context, PdfTextSelectionChangedDetails details) async {
@@ -33,11 +46,33 @@ class _PdfFileState extends State<PdfFile> {
         top: details.globalSelectedRegion!.center.dy - 60,
         left: details.globalSelectedRegion!.bottomLeft.dx,
         child: ElevatedButton(
-          child: Text('Extract',
+          child:  Text('Extract',
               style: TextStyle(fontSize: 10, color: Colors.black)),
-          onPressed: () {
-              print(details.selectedText);
-            _pdfViewerController.clearSelection();
+          onPressed: () async {
+            showLoading(context: context);
+            if (details.selectedText != null ) {
+              try {
+                 chatGptResponse = await getChatGptResponse(details.selectedText!);
+                 Navigator.pop(context);
+                showModalBottomSheet(context: context, builder: (BuildContext context) {
+                  _saveStrings(val: [details.selectedText!,chatGptResponse!]);
+                  return Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                    child: Text("${details.selectedText!} = $chatGptResponse"),
+                  );
+                }
+                );
+              } catch (error) {
+                showErrorMessage(message: error.toString(), context: context);
+              } finally {
+                _pdfViewerController.clearSelection();
+                if (_overlayEntry != null) {
+                  _overlayEntry!.remove();
+                  _overlayEntry = null;
+                }
+              }
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blueAccent,
@@ -53,10 +88,10 @@ class _PdfFileState extends State<PdfFile> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(''),
+          title: const Text(''),
         ),
         body: FutureBuilder(
-          future: Future.delayed(Duration(milliseconds: 20)),
+          future: Future.delayed(const Duration(milliseconds: 1)),
           builder: (context, snapshot) {
             return SfPdfViewer.file(
               File(widget.file),
@@ -67,7 +102,7 @@ class _PdfFileState extends State<PdfFile> {
                   _overlayEntry = null;
                 } else if (details.selectedText != null &&
                     _overlayEntry == null) {
-                  _showContextMenu(context, details);
+                    _showContextMenu(context, details);
                 }
               },
               controller: _pdfViewerController,

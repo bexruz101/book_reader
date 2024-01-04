@@ -8,6 +8,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../model/book_model.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,6 +34,15 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+  getNumberOfPages(String filePath) async {
+    // Load the PDF file
+    final file = File(filePath);
+    final pdfDocument = await PdfDocument.fromBase64String(file.path);
+    // Get the number of pages
+    final pages = pdfDocument.pages;
+    return pages;
+  }
+
   @override
   void initState() {
     _loadFiles();
@@ -52,14 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             final result = await FilePicker.platform
-                .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);            
+                .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
             if (result == null) return;
-            final file = result.files.first;                                     
-            openPDF(context, file.path!);                                      
+            final file = result.files.first;
+            openPDF(context, file.path!);
             LocalDatabase.saveFilePath(BookModel(
                 id: 0,
                 extension: file.extension!,
-                size: file.size,  
+                size: file.size,
                 name: file.name,
                 path: file.path!));
             _loadFiles();

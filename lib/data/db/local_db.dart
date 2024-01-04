@@ -29,5 +29,16 @@ class LocalDatabase {
     return boolBox.get(key, defaultValue: defaultValue);
   }
 
+  static Future<void> saveVocab(String key, List<Map<String, dynamic>>  value1,) async {
+    var stringBox = await Hive.openBox<List<Map<String, dynamic>> >('stringBox');
+    await stringBox.put(key, value1);
 
+  }
+
+  // Function to get two strings from Hive
+  static Future<List<Map<String, dynamic>>> getVocabList(String key) async {
+    var stringBox = await Hive.openBox<List<Map<String, dynamic>>>('stringBox');
+    final List<Map<String, dynamic>>? values = stringBox.get(key) ;
+    return values ?? [];
+  }
 }
